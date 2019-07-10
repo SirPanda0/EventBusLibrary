@@ -1,0 +1,14 @@
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\bin\Debug\netcoreapp2.2\EmailLibrary.deps.json
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\bin\Debug\netcoreapp2.2\EmailLibrary.dll
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\bin\Debug\netcoreapp2.2\EventBus.dll
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\bin\Debug\netcoreapp2.2\EventBusRabbitMQ.dll
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\bin\Debug\netcoreapp2.2\EventBusRabbitMQ.pdb
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\bin\Debug\netcoreapp2.2\EventBus.pdb
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\obj\Debug\netcoreapp2.2\EmailLibrary.csprojAssemblyReference.cache
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\obj\Debug\netcoreapp2.2\EmailLibrary.csproj.CoreCompileInputs.cache
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\obj\Debug\netcoreapp2.2\EmailLibrary.AssemblyInfoInputs.cache
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\obj\Debug\netcoreapp2.2\EmailLibrary.AssemblyInfo.cs
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\obj\Debug\netcoreapp2.2\EmailLibrary.csproj.CopyComplete
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\bin\Debug\netcoreapp2.2\EmailLibrary.pdb
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\obj\Debug\netcoreapp2.2\EmailLibrary.dll
+C:\Users\ipanagushin\source\repos\EventBus_Libraries\EmailLibrary\obj\Debug\netcoreapp2.2\EmailLibrary.pdb
