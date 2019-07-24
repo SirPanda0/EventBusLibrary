@@ -12,6 +12,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,9 @@ namespace EventBusRabbitMQ
         private readonly ILifetimeScope _autofac;
         private readonly string AUTOFAC_SCOPE_NAME = "EmailService_event_bus";
         private readonly int _retryCount;
+        private readonly int RETRY_DELAY = 300000;
+        private readonly string RETRY_EXCHANGE = "RetryExchange";
+        private readonly string RETRY_QUEUE = "RetryQueue";
 
         private IModel _consumerChannel;
         private string _queueName;
@@ -103,7 +107,7 @@ namespace EventBusRabbitMQ
 
                     channel.BasicPublish(
                         exchange: BROKER_NAME,
-                        routingKey: _queueName, 
+                        routingKey: _queueName, //Maybe
                         mandatory: true,
                         basicProperties: properties,
                         body: body);
@@ -135,6 +139,7 @@ namespace EventBusRabbitMQ
             StartBasicConsume();
         }
 
+        //TODO имя эвента
         private void DoInternalSubscription(string eventName)
         {
             var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
@@ -149,6 +154,19 @@ namespace EventBusRabbitMQ
                 {
                     channel.QueueBind(queue: _queueName,
                                       exchange: BROKER_NAME,
+                                      routingKey: eventName);
+
+                    var queueArgs = new Dictionary<string, object>
+                    {
+                        { "x-dead-letter-exchange", BROKER_NAME },
+                        { "x-message-ttl", RETRY_DELAY }
+                    };
+
+                    channel.ExchangeDeclare(RETRY_EXCHANGE, "direct");
+                    channel.QueueDeclare(RETRY_QUEUE, true, false, false, queueArgs);
+
+                    channel.QueueBind(queue: RETRY_QUEUE,
+                                      exchange: RETRY_EXCHANGE,
                                       routingKey: eventName);
                 }
             }
@@ -215,16 +233,24 @@ namespace EventBusRabbitMQ
                 }
 
                 await ProcessEvent(eventName, message);
+
             }
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "----- ERROR Processing message \"{Message}\"", message);
-            }
 
+                _consumerChannel.BasicPublish(
+                        exchange: RETRY_EXCHANGE,
+                        routingKey: eventName, //Maybe
+                        mandatory: true,
+                        body: eventArgs.Body);
+
+            }
             // Even on exception we take the message off the queue.
             // in a REAL WORLD app this should be handled with a Dead Letter Exchange (DLX). 
             // For more information see: https://www.rabbitmq.com/dlx.html
             _consumerChannel.BasicAck(eventArgs.DeliveryTag, multiple: false);
+
         }
 
         private IModel CreateConsumerChannel()
@@ -260,7 +286,7 @@ namespace EventBusRabbitMQ
             return channel;
         }
 
-        //TODO
+        //TODo
         private async Task ProcessEvent(string eventName, string message)
         {
             _logger.LogTrace("Processing RabbitMQ event: {EventName}", eventName);
@@ -299,6 +325,7 @@ namespace EventBusRabbitMQ
             {
                 _logger.LogWarning("No subscription for RabbitMQ event: {EventName}", eventName);
             }
+
         }
     }
 }
